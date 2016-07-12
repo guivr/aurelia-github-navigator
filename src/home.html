@@ -1,0 +1,44 @@
+<template>
+    <require from="./valueConverters/take"></require>
+
+    <div class="container">
+         <div align="center">
+            <h1>Aurelia GitHub Navigator</h1>
+            <p class="lead">Simple example of Restful API's use in Aurelia Framework. <br> Search for organizations, users or repositories.</p>
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3">
+                    <form role="search">
+                      <div class="form-group">
+                        <select ref="searchType">
+                            <option value="repositories" selected>Repositories</option>
+                            <option value="users">Users</option>
+                        </select>
+                        <input type="text" value.bind="query & debounce:400" onkeypress="${pesquisar(query, searchType.value)}" class="form-control" placeholder="Search">
+                      </div>
+                    </form>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th if.bind="searchType.value == 'users'">Avatar</th>
+                    <th>Name</th>
+                    <th if.bind="searchType.value == 'repositories'">Stars</th>
+                    <th if.bind="searchType.value == 'repositories'">Forks</th>
+                    <th if.bind="searchType.value == 'repositories'">Issues</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr repeat.for="result of results | take:25">
+                    <td if.bind="searchType.value == 'users'"><img src="${result.avatar_url}" width="50px" height="50px"></td>
+                    <td if.bind="searchType.value == 'users'"><a href="${result.html_url}">${result.login}</a></td>
+                    <td if.bind="searchType.value == 'repositories'"><a href="${'#/repos/' + result.owner.login + '/' + result.name}">${result.name}</a></td>
+                    <td if.bind="searchType.value == 'repositories'">${result.stargazers_count}</td>
+                    <td if.bind="searchType.value == 'repositories'">${result.forks_count}</td>
+                    <td if.bind="searchType.value == 'repositories'">${result.open_issues}</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,85 @@
+<template>
+  <require from="./valueConverters/date-format"></require>
+
+  <div class="container">
+    <div align="center">
+      <a href="${repoInfoResult.html_url}"><h1>${repoName}</h1></a>
+      <p class="lead">${repoInfoResult.description}</p>
+      <span class="label label-success">${repoInfoResult.stargazers_count} stars</span>
+      <span class="label label-default">${repoInfoResult.forks_count} forks</span>
+      <span class="label label-warning">${repoInfoResult.open_issues} issues</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="container">
+    <ul class="nav nav-tabs nav-justified">
+      <li role="presentation" class="active"><a href="#issues" data-toggle="tab">Opened Issues</a></li>
+      <li role="presentation"><a href="#commits" data-toggle="tab">Commits</a></li>
+      <li role="presentation"><a href="#pull-requests" data-toggle="tab">Pull Requests</a></li>
+    </ul>
+    <div class="tab-content">
+
+      <div role="tabpanel" class="tab-pane active" id="issues">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default" repeat.for="issue of repoIssuesResult">
+            <div class="panel-heading" role="tab" id="heading${issue.number}">
+              <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse${issue.number}" aria-expanded="false" aria-controls="collapse${issue.number}">
+                  <span class="label label-warning">${issue.state}</span>
+                    <span repeat.for="issueLabel of issue.labels" class="label" style="background: #${issueLabel.color}">${issueLabel.name}</span>
+                    <strong>${issue.title}</strong><br>
+                    <p>#${issue.number} - opened at ${issue.created_at | dateFormat} by ${issue.user.login}</p>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse${issue.number}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading${issue.number}">
+              <div class="panel-body">
+                ${issue.body}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane active" id="commits">
+        <ul class="list-group">
+          <li class="list-group-item" repeat.for="commit of repoCommitsResult">
+            <div class="media">
+              <div class="media-left">
+                <a href="#">
+                  <img src="${commit.author.avatar_url}" width="50px" height="50px">
+                </a>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">${commit.commit.message}</h4>
+                <p>Commit by ${commit.commit.author.name} at ${commit.commit.author.date | dateFormat}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div role="tabpanel" class="tab-pane active" id="pull-requests">
+        <ul class="list-group">
+          <li class="list-group-item" repeat.for="pull of repoPullsResult">
+            <div class="media">
+              <div class="media-left">
+                <a href="#">
+                  <img src="${pull.user.avatar_url}" width="50px" height="50px">
+                </a>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">${pull.title}</h4>
+                <p>Pull request by ${pull.user.login} at ${pull.created_at | dateFormat}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+</template>
