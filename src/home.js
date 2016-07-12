@@ -7,7 +7,7 @@ export class Home {
     this.http = new HttpClient();
   }
 
-  pesquisar(query, searchType) {
+  search(query, searchType) {
     return this.http
       .get('https://api.github.com/search/'+searchType+'?q='+query)
       .then(response => {

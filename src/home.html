@@ -11,14 +11,14 @@
                       <div class="form-group">
                         <select ref="searchType">
                             <option value="repositories" selected>Repositories</option>
-                            <option value="users">Users</option>
+                            <option value="users">Users & Organizations</option>
                         </select>
-                        <input type="text" value.bind="query & debounce:400" onkeypress="${pesquisar(query, searchType.value)}" class="form-control" placeholder="Search">
+                        <input type="text" value.bind="query" keypress.delegate="search(query, searchType.value) & debounce:500" class="form-control" placeholder="Search" autofocus>
                       </div>
                     </form>
                 </div>
             </div>
-            <table class="table table-striped">
+            <table class="table table-striped" if.bind="results[0]">
                 <thead>
                   <tr>
                     <th if.bind="searchType.value == 'users'">Avatar</th>
